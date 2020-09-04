@@ -141,6 +141,9 @@ namespace Microsoft.Azure.Kinect.Sensor
                 case NativeMethods.k4a_buffer_result_t k4a_result:
                     return IsSuccess(k4a_result);
 
+                case NativeMethods.k4a_stream_result_t k4a_result:
+                    return IsSuccess(k4a_result);
+
                 default:
                     throw new ArgumentException("Result is not of a recognized result type.", nameof(result));
             }
@@ -175,5 +178,11 @@ namespace Microsoft.Azure.Kinect.Sensor
         {
             return result == NativeMethods.k4a_buffer_result_t.K4A_BUFFER_RESULT_SUCCEEDED;
         }
+
+        internal static bool IsSuccess(NativeMethods.k4a_stream_result_t result)
+        {
+            return result == NativeMethods.k4a_stream_result_t.K4A_STREAM_RESULT_SUCCEEDED;
+        }
+
     }
 }

@@ -319,6 +319,22 @@ namespace Microsoft.Azure.Kinect.Sensor
         [NativeReference]
         public static extern k4a_buffer_result_t k4a_device_get_serialnum(k4a_device_t device_handle, StringBuilder serial_number, ref UIntPtr data_size);
 
+        [DllImport("k4arecord", CallingConvention = k4aCallingConvention)]
+        [NativeReference]
+        public static extern k4a_result_t k4a_playback_open([MarshalAs(UnmanagedType.LPStr)] string path, out k4a_playback_t playback_handle);
+
+        [DllImport("k4arecord", CallingConvention = k4aCallingConvention)]
+        [NativeReference]
+        public static extern k4a_result_t k4a_playback_close(IntPtr playback_handle);
+
+        [DllImport("k4arecord", CallingConvention = k4aCallingConvention)]
+        [NativeReference]
+        public static extern k4a_result_t k4a_playback_get_calibration(k4a_playback_t playback_handle, out Calibration calibration);
+
+        [DllImport("k4arecord", CallingConvention = k4aCallingConvention)]
+        [NativeReference]
+        public static extern k4a_stream_result_t k4a_playback_get_next_capture(k4a_playback_t playback_handle, out k4a_capture_t capture_handle);
+
         [DllImport("k4a", CallingConvention = k4aCallingConvention)]
         [NativeReference]
         public static extern ulong k4a_image_get_exposure_usec(k4a_image_t image_handle);
@@ -454,6 +470,20 @@ namespace Microsoft.Azure.Kinect.Sensor
             protected override bool ReleaseHandle()
             {
                 NativeMethods.k4a_device_close(this.handle);
+                return true;
+            }
+        }
+
+        public class k4a_playback_t : Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid
+        {
+            private k4a_playback_t()
+                : base(true)
+            {
+            }
+
+            protected override bool ReleaseHandle()
+            {
+                NativeMethods.k4a_playback_close(this.handle);
                 return true;
             }
         }
